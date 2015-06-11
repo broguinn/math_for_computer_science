@@ -1,0 +1,149 @@
+Marriage is a matching problem 6-10-2015
+
+Matching used for assignment, dating sites, interns at hospitals
+
+Def, matching: given graph G=(V,E), a matching is a collection of edges, or subgraph of G
+where every node has degree one.
+
+degree: number of connections? no
+ex. series of nodes w multiple connections
+    {x1-x6, x2-x5} matching size of 2
+    size 3 available, can't do 4 without reusing nodes because 8 nodes means 
+    all have to be used, two required to use same node. If all nodes are used,
+    called /perfect matching/
+
+Def: A matching is perfect if it has size |V|/2 (perhaps pipes mean cardinality, eg numerals)
+
+Start pairing the dependent matches.
+
+In some cases, some pairings are more desirable, give edges weights.
+We might weigh b1-g2 with five, but b1-g1 with ten. Lower weight means more desirable
+The goal is to find a matching with minimum weight (but maximum edges?)
+
+Def: The weight of a matching M is the sum of the weights on the edges of M, usually
+  requires perfect matching
+
+Def: A min-weight matching for a graph G is a a perfect matching for G with a minimum weight
+  over all perfect matchings.
+
+ex 5 - 16 or 10 - 10, min is 10
+
+Both maximum and mi-weight algos are solveable, quadratic or cubic time (?)
+
+Our version contains preference list, not edge
+Gives first choice, second choice in each direction
+This is why weight is given minimum preference, summing preference ranking for weights
+
+Def: rogue couple, given a matching M, x + y form a rogue couple if they prefer 
+  each other over their mates in M.
+
+Rogue couples create instability.
+
+Def: a matching is stable if there are no rogue couples. 
+
+Preferences cannot change over time.
+
+Goal: Find a perfect matching that is stable.
+
+Provided even male and female, and no matching in same set (gender), can always
+find stablility
+
+THRM: Stable Matching
+
+PF: By contradiction, assume stable matching M, thus murgatoid must marry someone
+  Without loss of generality, by symmetry, assume mergatoid is matched to Alex.
+  Alex + Robin form rogue couple for M, => M not stable, # (therefore)
+
+Problem: Stable Marriage
+  N boys and N girls, each boy has his own ranked preference list of all the girls.
+  Each girl has the same thing. Goal is to find a perfect matching without rogue couples.
+
+ex: 5 boys and 5 girls
+using the greedy algorithm, makes rogue couples
+recursive approach: find one optimum couple, then recurse: but can you find that stable couple
+all the simple things fail for this problem
+Mating algorithm: men go to girl, girl rejects all but her favorite. termination condition:
+do not have two or more boys on the balcony
+
+Need to show 
+  That TMA terminates
+  Everyone gets married
+  No rogue couples
+  Runs quickly (what's the Big O case)?
+  Is it fair for girls and boys?
+
+THM 1: TMA terminates in <= n^2 + 1 days
+pf: by contradiction. supposed TMA does not terminate in n^2 + 1 days
+claim: if we don't terminate on a day, that must be that had two boys at balcony, 
+  one must have been crossed off list. Measure progress by crossouts. Because there are
+  n^2 names, we cannot cross off n^2+1. #(contradiction)
+
+common computer science proof. want to argue that progress got made, therefore 
+  when you cannot progress more, algo must be done.
+
+Invariant: of this algo is that when a girl has a suitor, she only has a suitor
+  she likes at least as well.
+
+  Let P = if a girl G ever rejected a boy B, then the girl G has a suitor who she 
+    prefers to B
+
+  Lemma: P is an invariant for TMA
+
+  Invariants are proved with a base case, 
+    Proof: by induction, on number of days. 
+      Base case: is day zero, the beginning. Vacuously true, therefore all men are better than none.
+
+    Induction step: assume P holds end of day d
+    case 1: G rejects B on day d+1, then there was someone better, then P is true on D+1
+    case 2: G rejected B before D+1
+      P=> G had a better suitor on day D, G has same or better suitor on day D+1
+      P is true on day D+1
+
+THM2: Everyone is married in TMA.
+  PF: contradiction. Assume not everyone was married. Assume that some boy B is not married.
+    was rejected by everyone. Can't be under a balcony, because then every girl
+    would be married, therefore, Bn != Gn, therefore not this proof.
+    - B rejected by every girl
+    - every girl has a better suitor (lemma 1)
+    - every girl married
+    - every boy married #
+
+THM3: TMA produces a stable matching.
+  PF: Let Bob and Gail be any pair that are not married.
+    Case 1: Gail rejected bob
+      Gail has a suitor she likes better
+      Gail marries someone she likes better than Bob
+      Cannot be a rogue couple
+    Case 2: Gail did not reject Bob
+      Bob never serenaded Gail
+      Bob got married to someone he likes better than Gail
+      Not rogue
+    No rogue couples, must be stable.
+
+Is it unique? Gives you a deterministic answer, might be more stable matchings.
+
+One issue left: fairness
+  - which is better? proposers or accepters.
+  - It turns out that we can prove this.
+  - Boys have all the power, very favorable for the boys.
+
+Let S = set of all stable matches, S != 0
+For each person P, we define the realm of possibility for P to be the set f mates 
+  that you might have in a stable matching. 
+
+EQ: 4 people
+
+Def: a person's optimal mate is his or her favorite in the realm of possibility
+
+Def: a person's pessimal mate is his or her least favorite from the realm of possibility
+
+THM4: TMA marries every boy w his optimal mate.
+
+THM5: TMA marries every girl with her pessimal mate
+Pf: By contradiction
+  Supposed that stable matching M where girl G 
+
+TMA most famoulsy used for MDs in residency programs. 
+
+Used for servers and requests, performance v cost. By who we make a boy and a girl, 
+We trade off 
